@@ -1,21 +1,42 @@
 import Notiflix from 'notiflix';
 
+const form = document.querySelector(`.form`);
+form.addEventListener(`submit`, onSubmit);
 
+let delay = Number(form.delay.value);
+let step = Number(form.step.value);
+let amount = Number(form.amount.value);
+
+function onSubmit(e) {
+  e.preventDefault();
+
+  for (let i = 0; i <= amount; i += 1) {
+    createPromise(i, delay)
+    .then(({position, delay}) => {
+      Notiflix.Notify.success(
+        `✅ Fulfilled promise ${position} in ${delay}ms`
+      );
+    })
+    .catch(({position, delay}) => {
+      Notiflix.Notify.failure(
+      `❌ Rejected promise ${position} in ${delay}ms`  
+      );
+    });
+    delay += step
+  }
+}
 
 function createPromise(position, delay) {
   const shouldResolve = Math.random() > 0.3;
-  if (shouldResolve) {
-    // Fulfill
-  } else {
-    // Reject
+
+  return new Promise((res, rej) => {
+    setTimeout(() => {
+      if (shouldResolve) {
+res({position, delay})      
+    } else {
+     
+    rej({position, delay});
   }
-}
- for (let i = 0; i < Number(amount.value); i += 1) {
-  createPromise(i + 1, Number(delay.value) + Number(step.value) * i)
-  .then(({ position, delay }) => {
-    Notify.success(`:белая_галочка: Fulfilled promise ${position} in ${delay}ms`);
-  })
-  .catch(({ position, delay }) => {
-    Notify.failure(`:х: Rejected promise ${position} in ${delay}ms`);
-  });
-};
+}, delay);
+});
+
