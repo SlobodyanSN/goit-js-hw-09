@@ -3,10 +3,6 @@ import Notiflix from 'notiflix';
 const form = document.querySelector(`.form`);
 form.addEventListener(`submit`, onSubmit);
 
-let delay = form.elements.delay.value;
-let step = form.elements.step.value;
-let amount = Number(form.elements.amount.value);
-
 function onSubmit(e) {
   e.preventDefault();
 
